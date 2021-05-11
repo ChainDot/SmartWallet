@@ -28,6 +28,7 @@ contract SmartWallet is Ownable {
         uint256 amount
     );
     event VipSet(address indexed account, bool status);
+    event Approval(address indexed owner, address spender, uint256 amount);
 
     // Exercice 2
     // Ajouter un event Approval qui sera emit des qu'un approval aura été autorisé
@@ -67,7 +68,10 @@ contract SmartWallet is Ownable {
     // Implémenter cette fonction pour que le msg.sender autorise spender à
     // dépenser en son nom l'equivalent de amount
     // il faudra manipuler pour cela le double mapping _allowances
-    function approve(address spender, uint256 amount) public {}
+    function approve(address spender, uint256 amount) public {
+        _allowances[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
+    }
 
     function transfer(address recipient, uint256 amount) public {
         require(
@@ -94,9 +98,7 @@ contract SmartWallet is Ownable {
         address from,
         address to,
         uint256 amount
-    ) public {
-        // ecriture dans un registre comptable
-    }
+    ) public {}
 
     function withdrawProfit() public onlyOwner {
         require(_profit > 0, "SmartWallet: can not withdraw 0 ether");
@@ -126,7 +128,9 @@ contract SmartWallet is Ownable {
         public
         view
         returns (uint256 remaining)
-    {}
+    {
+        return _allowances[owner_][spender];
+    }
 
     function total() public view returns (uint256) {
         return address(this).balance;
