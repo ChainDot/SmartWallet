@@ -12,6 +12,7 @@ contract Birthday is Ownable {
 
     event ReceivedM(address indexed sender, uint256 value);
     event Received(address indexed sender, uint256 value);
+    event gotPresent(address indexed owner, uint256 value);
 
     constructor(address owner_, uint256 birthday_) Ownable(owner_) {
         _birthday = block.timestamp + (birthday_ * 1 days);
@@ -38,6 +39,7 @@ contract Birthday is Ownable {
             "Birthday: Its not your birthday today"
         );
         payable(msg.sender).sendValue(address(this).balance);
+        emit gotPresent(msg.sender, (address(this).balance));
     }
 
     function balanceFund() public view returns (uint256) {
