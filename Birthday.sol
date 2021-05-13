@@ -14,7 +14,7 @@ contract Birthday is Ownable {
     event Received(address indexed sender, uint256 value);
 
     constructor(address owner_, uint256 birthday_) Ownable(owner_) {
-        _birthday = block.timestamp + (birthday_ * 1 minutes);
+        _birthday = block.timestamp + (birthday_ * 1 days);
     }
 
     // Metamask deposit funds into the smartContract
@@ -33,7 +33,10 @@ contract Birthday is Ownable {
             address(this).balance > 0,
             "Birthday: sorry your friends are too cheap"
         );
-        require(block.timestamp >= _birthday);
+        require(
+            block.timestamp >= _birthday,
+            "Birthday: Its not your birthday today"
+        );
         payable(msg.sender).sendValue(address(this).balance);
     }
 
