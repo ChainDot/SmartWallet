@@ -20,11 +20,13 @@ contract Birthday is Ownable {
 
     // Metamask deposit funds into the smartContract
     receive() external payable {
+        require(block.timestamp <= _birthday, "Sorry mate it is too late");
         emit ReceivedM(msg.sender, msg.value);
     }
 
     //  funtion offer to deposit funds into the smartContract
     function offer() external payable {
+        require(block.timestamp <= _birthday, "Sorry mate it is too late");
         emit Received(msg.sender, msg.value);
     }
 
