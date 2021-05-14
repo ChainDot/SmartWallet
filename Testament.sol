@@ -8,7 +8,7 @@ import "./Ownable.sol";
 contract Testament is Ownable {
     using Address for address payable;
 
-    mapping(address => uint256) _beneficiaryBalance;
+    mapping(address => uint256) private _beneficiaryBalance;
     address private _doctor;
     bool private _isDead;
 
@@ -29,7 +29,6 @@ contract Testament is Ownable {
         _;
     }
 
-    // the doctor can pronounce the person dead only once
     function pronouncedDead() public onlyDoctor {
         _isDead = true;
         emit dead(_isDead);
@@ -47,22 +46,14 @@ contract Testament is Ownable {
         emit withdrewHeritage(msg.sender, amount);
     }
 
-    function bequeath(address account, uint256 amount)
-        public
-        payable
-        onlyOwner
-    {
-        require(
-            msg.value == amount,
-            "Testament: value should be equal to amount"
-        );
+    function bequeath(address account) public payable onlyOwner {
         require(account != address(0), "Testament: transfer to zero address");
         require(
             _isDead != true,
-            "Testament: the owner is dead you can not bequeath to anyone anymore "
+            "Testament: the owner is dead you can not bequeath to anyone anymore"
         );
-        _beneficiaryBalance[account] += amount;
-        emit bequeathed(account, amount);
+        _beneficiaryBalance[account] += msg.value;
+        emit bequeathed(account, msg.value);
     }
 
     function changeDoctor(address newDoctor) public onlyOwner {
