@@ -57,7 +57,10 @@ contract Testament is Ownable {
     }
 
     function changeDoctor(address newDoctor) public onlyOwner {
-        require(_msg.sender != newDoctor, "Testament: Owner can not be set as doctor")
+        require(
+            _msg.sender != newDoctor,
+            "Testament: Owner can not be set as doctor"
+        );
         _doctor = newDoctor;
         emit doctorSwapped(newDoctor);
     }
